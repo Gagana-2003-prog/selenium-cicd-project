@@ -1,0 +1,39 @@
+name: Selenium CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  selenium-test:
+    name: Run Selenium Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Chrome Browser
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run Selenium Tests
+        run: node test.mjs
+
+      - name: Test Results
+        if: always()
+        run: |
+          echo "================================"
+          echo "Pipeline execution completed!"
+          echo "Check above logs for test results"
+          echo "================================"
