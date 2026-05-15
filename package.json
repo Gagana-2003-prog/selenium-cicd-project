@@ -1,0 +1,13 @@
+{
+  "name": "selenium-cicd-project",
+  "version": "1.0.0",
+  "description": "Continuous Testing Pipeline using CI/CD with Selenium + GitHub Actions",
+  "main": "test.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "node test.mjs"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.18.1"
+  }
+}
