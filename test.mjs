@@ -10,7 +10,7 @@ async function runTests() {
   console.log("🚀 Starting Selenium Tests...\n");
   const options = new chrome.Options();
   options.addArguments("--headless=new","--no-sandbox","--disable-dev-shm-usage","--disable-gpu","--window-size=1920,1080");
-const service = new chrome.ServiceBuilder("/home/gagana-br/selenium-cicd-project/chromedriver-linux64/chromedriver");
+const service = new chrome.ServiceBuilder();
 const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).setChromeService(service).build();
   let passed = 0, failed = 0;
   try {
