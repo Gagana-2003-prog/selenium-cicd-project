@@ -2,9 +2,9 @@ name: Selenium CI/CD Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   selenium-test:
