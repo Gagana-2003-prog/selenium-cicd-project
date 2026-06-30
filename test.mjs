@@ -18,7 +18,7 @@ const driver = await new Builder().forBrowser("chrome").setChromeOptions(options
     try {
       await driver.get(WEBSITE_URL);
       const title = await driver.getTitle();
-      if (title.includes("Amazon")) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
+      if (title.includes("Swag Labs")) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
       else { console.log("   ❌ FAILED — Unexpected title:", title); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
