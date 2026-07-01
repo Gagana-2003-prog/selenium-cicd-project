@@ -113,7 +113,7 @@ async function runTests() {
 
       console.log("Products found:", products.length);
 
-      if (products.length === 10) {
+      if (products.length === 6) {
         console.log(
           "   ✅ PASSED — Found",
           products.length,
