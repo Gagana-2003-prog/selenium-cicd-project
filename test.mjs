@@ -9,7 +9,7 @@ const WAIT_TIME = 15000;
 async function runTests() {
   console.log("🚀 Starting Selenium Tests...\n");
   const options = new chrome.Options();
-  options.addArguments("--headless=new","--no-sandbox","--disable-dev-shm-usage","--disable-gpu","--window-size=1920,1080");
+  options.addArguments("--no-sandbox","--disable-dev-shm-usage","--disable-gpu","--window-size=1920,1080");
 const service = new chrome.ServiceBuilder();
 const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).setChromeService(service).build();
   let passed = 0, failed = 0;
@@ -42,7 +42,7 @@ const driver = await new Builder().forBrowser("chrome").setChromeOptions(options
     console.log("\n📋 TEST 4: Checking products...");
     try {
       const products = await driver.findElements(By.className("inventory_item"));
-      if (products.length ===6) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
+      if (products.length ===10) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
       else { console.log("   ❌ FAILED — No products found!"); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
