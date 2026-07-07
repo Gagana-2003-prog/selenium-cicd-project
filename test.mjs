@@ -62,7 +62,7 @@ async function runTests() {
     console.log("\n📋 TEST 4: Checking products...");
     try {
       const products = await driver.findElements(By.className("inventory_item"));
-      if (products.length === 6) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
+      if (products.length === 10) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
       else { console.log("   ❌ FAILED — Expected 6 products, found:", products.length); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
