@@ -6,13 +6,17 @@ const WAIT_TIME = 15000;
 async function createDriver() {
   const options = new chrome.Options();
 
-  // Visible Chrome browser
   options.addArguments(
     "--no-sandbox",
     "--disable-dev-shm-usage",
     "--disable-gpu",
     "--window-size=1920,1080"
   );
+
+  // Run headless only when in GitHub Actions (CI), keep it visible on your own PC
+  if (process.env.CI) {
+    options.addArguments("--headless=new");
+  }
 
   const driver = await new Builder()
     .forBrowser("chrome")
