@@ -5,9 +5,21 @@ const WAIT_TIME = 15000;
 
 async function createDriver() {
   const options = new chrome.Options();
-  options.addArguments("--headless=new","--no-sandbox","--disable-dev-shm-usage","--disable-gpu","--window-size=1920,1080");
-  const service = new chrome.ServiceBuilder();
-  return await new Builder().forBrowser("chrome").setChromeOptions(options).setChromeService(service).build();
+
+  // Visible Chrome browser
+  options.addArguments(
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-gpu",
+    "--window-size=1920,1080"
+  );
+
+  const driver = await new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(options)
+    .build();
+
+  return driver;
 }
 
 async function runTests() {
