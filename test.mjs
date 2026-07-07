@@ -23,7 +23,7 @@ async function createDriver() {
 }
 
 async function runTests() {
-  console.log("🚀 Starting Selenium Tests...\n");
+  console.log("🚀 Starting Selenium Tests - Demo Run\n");
   let passed = 0, failed = 0;
 
   // ==================== WEBSITE 1: SWAG LABS ====================
