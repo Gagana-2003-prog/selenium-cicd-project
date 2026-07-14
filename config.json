@@ -1,0 +1,25 @@
+{
+  "swaglabs": {
+    "expectedTitle": "Swag Labs",
+    "usernameId": "user-name",
+    "passwordId": "password",
+    "loginButtonId": "login-button",
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "expectedProductCount": 10,
+    "logoutUrlShouldNotContain": "inventory"
+  },
+  "todomvc": {
+    "expectedTitle": "TodoMVC",
+    "todoText": "Buy groceries",
+    "minimumItems": 1
+  },
+  "orangehrm": {
+    "expectedTitle": "OrangeHRM",
+    "usernameField": "username",
+    "passwordField": "password",
+    "username": "Admin",
+    "password": "admin123",
+    "dashboardClass": "oxd-topbar-header"
+  }
+}

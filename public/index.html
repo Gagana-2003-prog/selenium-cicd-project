@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Selenium Test Configuration</title>
+</head>
+<body>
+
+<h1>Selenium Test Configuration</h1>
+
+<h2>Swag Labs</h2>
+
+<label>Expected Title</label><br>
+<input id="swagTitle"><br><br>
+
+<label>Username</label><br>
+<input id="swagUsername"><br><br>
+
+<label>Password</label><br>
+<input id="swagPassword"><br><br>
+
+<label>Expected Product Count</label><br>
+<input id="productCount" type="number"><br><br>
+
+<h2>TodoMVC</h2>
+
+<label>Expected Title</label><br>
+<input id="todoTitle"><br><br>
+
+<label>Todo Text</label><br>
+<input id="todoText"><br><br>
+
+<label>Minimum Items</label><br>
+<input id="minimumItems" type="number"><br><br>
+
+<h2>OrangeHRM</h2>
+
+<label>Expected Title</label><br>
+<input id="orangeTitle"><br><br>
+
+<label>Username</label><br>
+<input id="orangeUsername"><br><br>
+
+<label>Password</label><br>
+<input id="orangePassword"><br><br>
+
+<label>Dashboard Class</label><br>
+<input id="dashboardClass"><br><br>
+
+<button onclick="saveConfig()">Save Configuration</button>
+
+<script>
+async function loadConfig() {
+    const response = await fetch('/config');
+    const config = await response.json();
+
+    swagTitle.value = config.swaglabs.expectedTitle;
+    swagUsername.value = config.swaglabs.username;
+    swagPassword.value = config.swaglabs.password;
+    productCount.value = config.swaglabs.expectedProductCount;
+
+    todoTitle.value = config.todomvc.expectedTitle;
+    todoText.value = config.todomvc.todoText;
+    minimumItems.value = config.todomvc.minimumItems;
+
+    orangeTitle.value = config.orangehrm.expectedTitle;
+    orangeUsername.value = config.orangehrm.username;
+    orangePassword.value = config.orangehrm.password;
+    dashboardClass.value = config.orangehrm.dashboardClass;
+}
+
+async function saveConfig() {
+
+    const config = {
+        swaglabs: {
+            expectedTitle: swagTitle.value,
+            usernameId: "user-name",
+            passwordId: "password",
+            loginButtonId: "login-button",
+            username: swagUsername.value,
+            password: swagPassword.value,
+            expectedProductCount: Number(productCount.value),
+            logoutUrlShouldNotContain: "inventory"
+        },
+
+        todomvc: {
+            expectedTitle: todoTitle.value,
+            todoText: todoText.value,
+            minimumItems: Number(minimumItems.value)
+        },
+
+        orangehrm: {
+            expectedTitle: orangeTitle.value,
+            usernameField: "username",
+            passwordField: "password",
+            username: orangeUsername.value,
+            password: orangePassword.value,
+            dashboardClass: dashboardClass.value
+        }
+    };
+
+    await fetch('/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+    });
+
+    alert("Configuration Saved Successfully!");
+}
+
+loadConfig();
+</script>
+
+</body>
+</html>

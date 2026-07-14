@@ -1,5 +1,11 @@
 import { Builder, By, until } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const config = JSON.parse(fs.readFileSync(path.join(__dirname, "config.json"), "utf-8"));
 
 const WAIT_TIME = 15000;
 
@@ -13,7 +19,6 @@ async function createDriver() {
     "--window-size=1920,1080"
   );
 
-  // Run headless only when in GitHub Actions (CI), keep it visible on your own PC
   if (process.env.CI) {
     options.addArguments("--headless=new");
   }
@@ -38,23 +43,23 @@ async function runTests() {
     try {
       await driver.get("https://www.saucedemo.com");
       const title = await driver.getTitle();
-      if (title.includes("Swag Labs")) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
+      if (title.includes(config.swaglabs.expectedTitle)) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
       else { console.log("   ❌ FAILED — Unexpected title:", title); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 2: Checking login form elements...");
     try {
-      await driver.findElement(By.id("user-name"));
-      await driver.findElement(By.id("password"));
-      await driver.findElement(By.id("login-button"));
+      await driver.findElement(By.id(config.swaglabs.usernameId));
+      await driver.findElement(By.id(config.swaglabs.passwordId));
+      await driver.findElement(By.id(config.swaglabs.loginButtonId));
       console.log("   ✅ PASSED — All form elements found!"); passed++;
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 3: Testing login...");
     try {
-      await driver.findElement(By.id("user-name")).sendKeys("standard_user");
-      await driver.findElement(By.id("password")).sendKeys("secret_sauce");
-      await driver.findElement(By.id("login-button")).click();
+      await driver.findElement(By.id(config.swaglabs.usernameId)).sendKeys(config.swaglabs.username);
+      await driver.findElement(By.id(config.swaglabs.passwordId)).sendKeys(config.swaglabs.password);
+      await driver.findElement(By.id(config.swaglabs.loginButtonId)).click();
       await driver.wait(until.elementLocated(By.className("inventory_list")), WAIT_TIME);
       console.log("   ✅ PASSED — Login successful!"); passed++;
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
@@ -62,8 +67,8 @@ async function runTests() {
     console.log("\n📋 TEST 4: Checking products...");
     try {
       const products = await driver.findElements(By.className("inventory_item"));
-      if (products.length === 6) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
-      else { console.log("   ❌ FAILED — Expected 6 products, found:", products.length); failed++; }
+      if (products.length === config.swaglabs.expectedProductCount) { console.log("   ✅ PASSED — Found", products.length, "products!"); passed++; }
+      else { console.log("   ❌ FAILED — Expected", config.swaglabs.expectedProductCount, "products, found:", products.length); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 5: Testing logout...");
@@ -73,7 +78,7 @@ async function runTests() {
       await driver.executeScript("document.getElementById('logout_sidebar_link').click();");
       await driver.sleep(3000);
       const url = await driver.getCurrentUrl();
-      if (!url.includes("inventory")) { console.log("   ✅ PASSED — Logout successful!"); passed++; }
+      if (!url.includes(config.swaglabs.logoutUrlShouldNotContain)) { console.log("   ✅ PASSED — Logout successful!"); passed++; }
       else { throw new Error("Still on inventory page after logout"); }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
   } finally { await driver.quit(); }
@@ -86,14 +91,14 @@ async function runTests() {
     try {
       await driver.get("https://todomvc.com/examples/react/dist/");
       const title = await driver.getTitle();
-      if (title.includes("TodoMVC")) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
+      if (title.includes(config.todomvc.expectedTitle)) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
       else { console.log("   ❌ FAILED — Unexpected title:", title); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 7: Adding a todo item...");
     try {
       const input = await driver.wait(until.elementLocated(By.className("new-todo")), WAIT_TIME);
-      await input.sendKeys("Buy groceries\n");
+      await input.sendKeys(config.todomvc.todoText + "\n");
       await driver.sleep(1000);
       const todos = await driver.findElements(By.className("todo-list"));
       console.log("   ✅ PASSED — Todo item added successfully!"); passed++;
@@ -102,7 +107,7 @@ async function runTests() {
     console.log("\n📋 TEST 8: Checking todo item exists...");
     try {
       const items = await driver.findElements(By.css(".todo-list li"));
-      if (items.length > 0) { console.log("   ✅ PASSED — Found", items.length, "todo item(s)!"); passed++; }
+      if (items.length >= config.todomvc.minimumItems) { console.log("   ✅ PASSED — Found", items.length, "todo item(s)!"); passed++; }
       else { console.log("   ❌ FAILED — No todo items found!"); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
   } finally { await driver.quit(); }
@@ -115,29 +120,29 @@ async function runTests() {
     try {
       await driver.get("https://opensource-demo.orangehrmlive.com");
       const title = await driver.getTitle();
-      if (title.includes("OrangeHRM")) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
+      if (title.includes(config.orangehrm.expectedTitle)) { console.log("   ✅ PASSED — Website loaded! Title:", title); passed++; }
       else { console.log("   ❌ FAILED — Unexpected title:", title); failed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 10: Checking login form exists...");
     try {
-      await driver.wait(until.elementLocated(By.name("username")), WAIT_TIME);
-      await driver.findElement(By.name("password"));
+      await driver.wait(until.elementLocated(By.name(config.orangehrm.usernameField)), WAIT_TIME);
+      await driver.findElement(By.name(config.orangehrm.passwordField));
       console.log("   ✅ PASSED — Login form found!"); passed++;
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 11: Testing OrangeHRM login...");
     try {
-      await driver.findElement(By.name("username")).sendKeys("Admin");
-      await driver.findElement(By.name("password")).sendKeys("admin123");
+      await driver.findElement(By.name(config.orangehrm.usernameField)).sendKeys(config.orangehrm.username);
+      await driver.findElement(By.name(config.orangehrm.passwordField)).sendKeys(config.orangehrm.password);
       await driver.findElement(By.css("button[type='submit']")).click();
-      await driver.wait(until.elementLocated(By.className("oxd-topbar-header")), WAIT_TIME);
+      await driver.wait(until.elementLocated(By.className(config.orangehrm.dashboardClass)), WAIT_TIME);
       console.log("   ✅ PASSED — OrangeHRM Login successful!"); passed++;
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
 
     console.log("\n📋 TEST 12: Checking dashboard loads...");
     try {
-      const dashboard = await driver.findElement(By.className("oxd-topbar-header"));
+      const dashboard = await driver.findElement(By.className(config.orangehrm.dashboardClass));
       if (dashboard) { console.log("   ✅ PASSED — Dashboard loaded successfully!"); passed++; }
     } catch (err) { console.log("   ❌ FAILED:", err.message); failed++; }
   } finally { await driver.quit(); }
