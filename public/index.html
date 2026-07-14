@@ -3,74 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <title>Selenium Test Configuration</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #fdeef5, #f0e6fb);
+      margin: 0;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #6b3fa0;
+      font-size: 26px;
+      margin-bottom: 35px;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #ffffff;
+      width: 300px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(150, 100, 200, 0.15);
+    }
+    .card.swaglabs { border-top: 6px solid #ff8fb1; }
+    .card.todomvc  { border-top: 6px solid #b28fff; }
+    .card.orangehrm{ border-top: 6px solid #ff9f6b; }
+
+    .card h2 {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      color: #4a3b5c;
+    }
+    .icon {
+      display: block;
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 5px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      color: #666;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #e3d5ee;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      background: #fbf8fd;
+    }
+    input:focus {
+      border-color: #b28fff;
+      background: #ffffff;
+    }
+    .save-box {
+      max-width: 400px;
+      margin: 35px auto 0 auto;
+      background: #f3e8fb;
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(150, 100, 200, 0.15);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff8fb1, #b28fff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
 
 <h1>Selenium Test Configuration</h1>
 
-<h2>Swag Labs</h2>
+<div class="cards">
 
-<label>Expected Title</label><br>
-<input id="swagTitle"><br><br>
+  <div class="card swaglabs">
+    <span class="icon">🛍️</span>
+    <h2>Swag Labs</h2>
+    <label>Expected Title</label>
+    <input id="swagTitle">
+    <label>Username</label>
+    <input id="swagUsername">
+    <label>Password</label>
+    <input id="swagPassword">
+    <label>Expected Product Count</label>
+    <input id="productCount" type="number">
+  </div>
 
-<label>Username</label><br>
-<input id="swagUsername"><br><br>
+  <div class="card todomvc">
+    <span class="icon">📝</span>
+    <h2>TodoMVC</h2>
+    <label>Expected Title</label>
+    <input id="todoTitle">
+    <label>Todo Text</label>
+    <input id="todoText">
+    <label>Minimum Items</label>
+    <input id="minimumItems" type="number">
+  </div>
 
-<label>Password</label><br>
-<input id="swagPassword"><br><br>
+  <div class="card orangehrm">
+    <span class="icon">🏢</span>
+    <h2>OrangeHRM</h2>
+    <label>Expected Title</label>
+    <input id="orangeTitle">
+    <label>Username</label>
+    <input id="orangeUsername">
+    <label>Password</label>
+    <input id="orangePassword">
+    <label>Dashboard Class</label>
+    <input id="dashboardClass">
+  </div>
 
-<label>Expected Product Count</label><br>
-<input id="productCount" type="number"><br><br>
+</div>
 
-<h2>TodoMVC</h2>
-
-<label>Expected Title</label><br>
-<input id="todoTitle"><br><br>
-
-<label>Todo Text</label><br>
-<input id="todoText"><br><br>
-
-<label>Minimum Items</label><br>
-<input id="minimumItems" type="number"><br><br>
-
-<h2>OrangeHRM</h2>
-
-<label>Expected Title</label><br>
-<input id="orangeTitle"><br><br>
-
-<label>Username</label><br>
-<input id="orangeUsername"><br><br>
-
-<label>Password</label><br>
-<input id="orangePassword"><br><br>
-
-<label>Dashboard Class</label><br>
-<input id="dashboardClass"><br><br>
-
-<button onclick="saveConfig()">Save Configuration</button>
+<div class="save-box">
+  <button onclick="saveConfig()">💾 Save Configuration</button>
+</div>
 
 <script>
 async function loadConfig() {
     const response = await fetch('/config');
     const config = await response.json();
-
     swagTitle.value = config.swaglabs.expectedTitle;
     swagUsername.value = config.swaglabs.username;
     swagPassword.value = config.swaglabs.password;
     productCount.value = config.swaglabs.expectedProductCount;
-
     todoTitle.value = config.todomvc.expectedTitle;
     todoText.value = config.todomvc.todoText;
     minimumItems.value = config.todomvc.minimumItems;
-
     orangeTitle.value = config.orangehrm.expectedTitle;
     orangeUsername.value = config.orangehrm.username;
     orangePassword.value = config.orangehrm.password;
     dashboardClass.value = config.orangehrm.dashboardClass;
 }
-
 async function saveConfig() {
-
     const config = {
         swaglabs: {
             expectedTitle: swagTitle.value,
@@ -82,13 +171,11 @@ async function saveConfig() {
             expectedProductCount: Number(productCount.value),
             logoutUrlShouldNotContain: "inventory"
         },
-
         todomvc: {
             expectedTitle: todoTitle.value,
             todoText: todoText.value,
             minimumItems: Number(minimumItems.value)
         },
-
         orangehrm: {
             expectedTitle: orangeTitle.value,
             usernameField: "username",
@@ -98,7 +185,6 @@ async function saveConfig() {
             dashboardClass: dashboardClass.value
         }
     };
-
     await fetch('/update', {
         method: 'POST',
         headers: {
@@ -106,12 +192,9 @@ async function saveConfig() {
         },
         body: JSON.stringify(config)
     });
-
     alert("Configuration Saved Successfully!");
 }
-
 loadConfig();
 </script>
-
 </body>
 </html>
