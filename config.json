@@ -15,7 +15,7 @@
     "minimumItems": 1
   },
   "orangehrm": {
-    "expectedTitle": "OrangeHRM",
+    "expectedTitle": "applehrm",
     "usernameField": "username",
     "passwordField": "password",
     "username": "Admin",
