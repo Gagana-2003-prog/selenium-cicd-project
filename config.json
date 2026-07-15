@@ -6,7 +6,7 @@
     "loginButtonId": "login-button",
     "username": "standard_user",
     "password": "secret_sauce",
-    "expectedProductCount": 10,
+    "expectedProductCount": 6,
     "logoutUrlShouldNotContain": "inventory"
   },
   "todomvc": {
@@ -15,7 +15,7 @@
     "minimumItems": 1
   },
   "orangehrm": {
-    "expectedTitle": "applehrm",
+    "expectedTitle": "OrangeHRM",
     "usernameField": "username",
     "passwordField": "password",
     "username": "Admin",
