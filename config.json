@@ -6,7 +6,7 @@
     "loginButtonId": "login-button",
     "username": "standard_user",
     "password": "secret_sauce",
-    "expectedProductCount": 6,
+    "expectedProductCount": 10,
     "logoutUrlShouldNotContain": "inventory"
   },
   "todomvc": {
